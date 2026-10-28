@@ -1,0 +1,1 @@
+# smart_app_G1
