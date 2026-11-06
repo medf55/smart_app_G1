@@ -58,7 +58,7 @@ def predict(reading: SensorReading) -> PredictionOut:
     if predictor is None:
         raise HTTPException(
             status_code=503,
-            detail="Modèle non disponible. Entraînez le modèle (python -m maintai.train) avant de prédire."
+            detail="Modèle non disponible. Entraînez le modèle (python -m maintai.train) avant de prédire.",
         )
     prediction = predictor.predict(reading.model_dump())
     return PredictionOut(**prediction)
