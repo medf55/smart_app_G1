@@ -1,6 +1,6 @@
 # ADR 004 : choix du modèle et du seuil d'alerte de MaintAI
 
-Date : 25/11/2026 · Auteurs : Salah Eddine El Assassi, [coéquipiers]
+Date : 25/11/2026 · Auteurs : El Assassi Salaheddine, Benebbou Ahmed, Faris Mohamed
 
 ## Contexte
 MaintAI doit signaler les machines qui risquent de tomber en panne. Une panne manquée (faux négatif) coûte bien plus
@@ -27,8 +27,8 @@ ensuite. Les cinq runs ci-dessous sont dans l'expérience MLflow `maintai`, entr
 On retient la **régression logistique, C=1.0, seuil d'alerte 0.2**, parce qu'elle a le meilleur recall (0.838) :
 c'est elle qui manque le moins de pannes, ce qui est la contrainte principale du projet.
 
-- Identifiant du run MLflow : `[run_id du run --threshold 0.2]`
-- `data_md5` des données : `[data_md5 du run, identique au md5 de data/sensors.csv.dvc v1]`
+- Identifiant du run MLflow : `386608c9e3bb43019eea84185674d32f` (`nervous-lynx-118`, expérience `maintai`)
+- `data_md5` des données : `73e0b7cb3c6f795c70c3ddf970b99c15`, identique au md5 de `data/sensors.csv.dvc` dans le commit `eebed6f` (« Données v1 », 5000 relevés)
 
 ## Conséquences
 - On accepte plus de fausses alertes : la precision passe de 0.622 à 0.543, soit environ une alerte sur deux

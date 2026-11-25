@@ -1,9 +1,6 @@
 # Compte rendu · TP5 : suivre les entraînements (MLflow) et versionner les données (DVC)
 
-**Groupe :** 5IIR · G1  ·  **Membres :** Salah Eddine El Assassi, …  ·  **Date :** 25/11/2026
-
-> Les valeurs entre crochets `[...]` (identifiants de run, md5, commits) dépendent de votre machine :
-> remplacez-les par celles de votre terminal et de `mlflow ui`.
+**Groupe :** 5IIR · G1  ·  **Membres :** El Assassi Salaheddine, Benebbou Ahmed, Faris Mohamed  ·  **Date :** 25/11/2026
 
 ---
 
@@ -59,7 +56,7 @@ Vos runs (au moins quatre), relevés dans `mlflow ui` (mode « Model training »
 |---|---|---|---|
 | `python -m maintai.train` | 0.750 | 0.622 | 0.904 |
 | `python -m maintai.train --C 0.01` | 0.691 | 0.653 | 0.908 |
-| `python -m maintai.train --threshold 0.2` | 0.838 | 0.543 | 0.882 |
+| `python -m maintai.train --threshold 0.2` (`nervous-lynx-118`) | 0.838 | 0.543 | 0.882 |
 | `python -m maintai.train --model forest` | 0.728 | 0.562 | 0.886 |
 | `python -m maintai.train --model forest --threshold 0.2` | 0.831 | 0.479 | 0.854 |
 
@@ -93,15 +90,15 @@ Contenu de `data/sensors.csv.dvc` après `dvc add data/sensors.csv` :
 
 ```
 outs:
-- md5: [md5 v1]
-  size: [taille]
+- md5: 73e0b7cb3c6f795c70c3ddf970b99c15
+  size: 126815
   hash: md5
   path: sensors.csv
 ```
 
 Comparez la valeur `md5` de ce fichier au paramètre `data_md5` de votre dernier run MLflow. Que constatez-vous ?
 
-Ce sont exactement les mêmes valeurs : `file_md5` calcule la même empreinte que DVC. À partir d'un run MLflow, on
+Ce sont exactement les mêmes valeurs (`73e0b7cb3c6f795c70c3ddf970b99c15` pour les runs sur la v1) : `file_md5` calcule la même empreinte que DVC. À partir d'un run MLflow, on
 peut donc retrouver le reçu `.dvc` (et le commit Git) qui correspond aux données utilisées, puis les récupérer avec
 `dvc checkout` ou `dvc pull`. C'est le lien entre le modèle et ses données.
 
@@ -123,8 +120,8 @@ DVC voit que le fichier ne correspond plus au reçu : c'est une nouvelle version
 
 | Version | Commit Git (`git log --oneline`) | md5 (8 premiers caractères) | Nombre de lignes |
 |---|---|---|---|
-| v1 | [commit « Données v1 »] | [md5 v1] | 5000 |
-| v2 | [commit « Données v2 »] | [md5 v2] | 8000 |
+| v1 | `eebed6f` | `73e0b7cb` | 5000 |
+| v2 | `fefaa65` | `93fdeef2` | 8000 |
 
 Revenez à la v1 (`git checkout <commit> -- data/sensors.csv.dvc`, puis `dvc checkout`). Combien de lignes contient `data/sensors.csv` ? Puis revenez à la v2.
 
@@ -147,8 +144,8 @@ Entraînez un modèle sur la v2. Dans `mlflow ui`, comparez ce run à celui de l
 
 | Run | data_md5 (8 caractères) | n_train | recall | precision |
 |---|---|---|---|---|
-| v1 | [md5 v1] | 4000 | 0.750 | 0.622 |
-| v2 | [md5 v2] | 6400 | 0.741 | 0.650 |
+| v1 (`receptive-crane-693`) | `73e0b7cb` | 4000 | 0.750 | 0.622 |
+| v2 (`learned-toad-157`, run `f64f10452d3d448b83d8e3e950d058ad`) | `93fdeef2` | 6400 | 0.741 | 0.650 |
 
 Peut-on dire que le modèle v2 est « meilleur » ? Pourquoi faut-il être prudent en comparant deux runs entraînés sur des données différentes ?
 
@@ -161,7 +158,7 @@ de voir que les deux runs ne portent pas sur les mêmes données.
 ## 5. Décision : l'ADR 004
 
 Voir `docs/adr/004-choix-du-modele.md` : régression logistique, C=1.0, seuil 0.2.
-Run : `[run_id]` · `data_md5` : `[md5 v1]`.
+Run : `386608c9e3bb43019eea84185674d32f` (`nervous-lynx-118`) · `data_md5` : `73e0b7cb3c6f795c70c3ddf970b99c15` (v1, commit `eebed6f`).
 
 ## 6. Questions de compréhension
 
